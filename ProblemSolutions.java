@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   ADD YOUR NAME / SECTION NUMBER HERE
+ *   Malec Basel Tarabein / 002
  *
  *   This java file contains the problem solutions of canFinish and
  *   numGroups methods.
@@ -165,34 +165,40 @@ class ProblemSolutions {
 
     public int numGroups(int[][] adjMatrix) {
         int numNodes = adjMatrix.length;
-        Map<Integer,List<Integer>> graph = new HashMap();
-        int i = 0, j =0;
+        Set<Integer> set = new HashSet();
+        int result = 0;
 
-        /*
-         * Converting the Graph Adjacency Matrix to
-         * an Adjacency List representation. This
-         * sample code illustrates a technique to do so.
-         */
-
-        for(i = 0; i < numNodes ; i++){
-            for(j = 0; j < numNodes; j++){
-                if( adjMatrix[i][j] == 1 && i != j ){
-                    // Add AdjList for node i if not there
-                    graph.putIfAbsent(i, new ArrayList());
-                    // Add AdjList for node j if not there
-                    graph.putIfAbsent(j, new ArrayList());
-
-                    // Update node i adjList to include node j
-                    graph.get(i).add(j);
-                    // Update node j adjList to include node i
-                    graph.get(j).add(i);
+        for(int i = 0; i < numNodes; i++) {
+            if (set.add(i)) {
+                dfs1(i, adjMatrix, set);
+                dfs2(i, adjMatrix, set);
+                result++;
+            }
+        }
+        
+        return result;
+    }
+    
+    private static void dfs1(int nodeNum, int[][] adjMatrix, Set<Integer> set) {
+        for (int i = 0; i < adjMatrix[nodeNum].length; i++) {
+            if(adjMatrix[nodeNum][i] == 1) {
+                if(set.add(i)) {
+                    dfs1(i, adjMatrix, set);
+                    dfs2(i, adjMatrix, set);
                 }
             }
         }
+    }
 
-        // YOUR CODE GOES HERE - you can add helper methods, you do not need
-        // to put all code in this method.
-        return -1;
+    private static void dfs2(int nodeNum, int[][] adjMatrix, Set<Integer> set) {
+        for (int i = 0; i < adjMatrix.length; i++) {
+            if(adjMatrix[i][nodeNum] == 1) {
+                if(set.add(i)) {
+                    dfs1(i, adjMatrix, set);
+                    dfs2(i, adjMatrix, set);
+                }
+            }
+        }
     }
 
 }
