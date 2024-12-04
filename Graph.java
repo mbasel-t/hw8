@@ -9,6 +9,8 @@
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -104,7 +106,27 @@ public class Graph {
   
   public int findRoot() {
 
-    // ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME/SECTION AT TOP OF FILE
-    return -1;
-  } 
+    Set<Integer> set = new HashSet<Integer>(); // list of non-eligible integers
+    int result = -1; // default return val
+
+    for(LinkedList<Integer> adjList : adjListArr) {
+      set.addAll(adjList);
+    }
+
+    int i = 0;
+
+    // find the first root
+    for(; result == -1 && i < numVertices; i++) {
+      if(! set.contains(i))
+        result = vertexValues.get(i);
+    }
+
+    // check for other roots
+    for(; result != -1 && i < numVertices; i++) {
+      if(! set.contains(i))
+        result = -1;
+    }
+
+    return result;
+  }
 }
