@@ -78,12 +78,35 @@ class ProblemSolutions {
         int numNodes = numExams;  // # of nodes in graph
 
         // Build directed graph's adjacency list
-        ArrayList<Integer>[] adj = getAdjList(numExams, 
-                                        prerequisites); 
+        ArrayList<Integer>[] adj = getAdjList(numExams, prerequisites);
+        Set<Integer> doable = new HashSet<Integer>();
 
-        // ADD YOUR CODE HERE - ADD YOUR NAME / SECTION AT TOP OF FILE
-        return false;
+        int numFinishableExams = 0;
 
+        for (int i = 0; i < adj.length; i++) {
+            if (examDoable(new HashSet<Integer>(), doable, adj, i))
+                numFinishableExams++;
+        }
+        
+        return numFinishableExams >= numExams;
+
+    }
+
+    public boolean examDoable(Set<Integer> pathway, Set<Integer> doable, ArrayList<Integer>[] adj, int exam) {
+        if(doable.contains(exam))
+            return true;
+
+        boolean result = true;
+        pathway.add(exam);
+
+        for(int i = 0; i < adj[exam].size() && result; i++) {
+            result = ! pathway.contains(adj[exam].get(i)) && examDoable(new HashSet(pathway), doable, adj, adj[exam].get(i));
+        }
+
+        if(result)
+            doable.add(exam);
+
+        return result;
     }
 
 
